@@ -28,7 +28,7 @@ M.on_attach = function(client, bufnr)
   vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
   vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
   vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
-  vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
+  vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
 
   if client.server_capabilities.documentHighlightProvider then
     vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {

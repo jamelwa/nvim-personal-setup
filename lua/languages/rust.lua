@@ -116,31 +116,31 @@ vim.api.nvim_create_autocmd('FileType', {
 
     local opts = { noremap = true, silent = true, buffer = args.buf }
 
-    vim.keymap.set('n', '<leader>rr', function()
+    vim.keymap.set('n', '<leader>cr', function()
       vim.cmd('!cargo run')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo run' }))
 
-    vim.keymap.set('n', '<leader>rt', function()
+    vim.keymap.set('n', '<leader>ct', function()
       vim.cmd('!cargo test')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo test' }))
 
-    vim.keymap.set('n', '<leader>rb', function()
+    vim.keymap.set('n', '<leader>cb', function()
       vim.cmd('!cargo build')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo build' }))
 
-    vim.keymap.set('n', '<leader>rc', function()
+    vim.keymap.set('n', '<leader>cC', function()
       vim.cmd('!cargo check')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo check' }))
 
-    vim.keymap.set('n', '<leader>rC', function()
+    vim.keymap.set('n', '<leader>cl', function()
       vim.cmd('!cargo clippy')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo clippy' }))
 
-    vim.keymap.set('n', '<leader>rf', function()
+    vim.keymap.set('n', '<leader>cF', function()
       vim.cmd('!cargo fmt')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo format' }))
 
-    vim.keymap.set('n', '<leader>rd', function()
+    vim.keymap.set('n', '<leader>cd', function()
       vim.cmd('!cargo doc --open')
     end, vim.tbl_extend('force', opts, { desc = 'Cargo doc' }))
 

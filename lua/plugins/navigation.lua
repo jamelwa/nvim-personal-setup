@@ -200,7 +200,7 @@ return {
             desc = "show option",
           },
           ["run_current_replace"] = {
-            map = "<leader>rc",
+            map = "<leader>sr",
             cmd = "<cmd>lua require('spectre.actions').run_current_replace()<CR>",
             desc = "replace current line",
           },
