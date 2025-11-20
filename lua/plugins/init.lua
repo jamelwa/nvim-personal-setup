@@ -25,6 +25,6 @@ vim.list_extend(plugins, require('plugins.debug'))
 
 require("lazy").setup({
   spec = plugins,
-  install = { colorscheme = { "habamax" } },
+  install = { colorscheme = { "catppuccin" } },
   checker = { enabled = true },
 })
