@@ -386,4 +386,64 @@ return {
     end,
     event = { 'BufRead Cargo.toml' },
   },
+
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      indent = {
+        char = "│",
+        tab_char = "│",
+      },
+      scope = {
+        enabled = true,
+        show_start = false,
+        show_end = false,
+      },
+      exclude = {
+        filetypes = {
+          "help",
+          "alpha",
+          "dashboard",
+          "neo-tree",
+          "Trouble",
+          "trouble",
+          "lazy",
+          "mason",
+          "notify",
+          "toggleterm",
+          "lazyterm",
+        },
+      },
+    },
+  },
+
+  {
+    "NMAC427/guess-indent.nvim",
+    config = function()
+      require('guess-indent').setup {
+        auto_cmd = true,
+        override_editorconfig = false,
+        filetype_exclude = {
+          "netrw",
+          "tutor",
+        },
+        buftype_exclude = {
+          "help",
+          "nofile",
+          "terminal",
+          "prompt",
+        },
+        on_tab_options = {
+          ["expandtab"] = false,
+        },
+        on_space_options = {
+          ["expandtab"] = true,
+          ["tabstop"] = "detected",
+          ["softtabstop"] = "detected",
+          ["shiftwidth"] = "detected",
+        },
+      }
+    end,
+  },
 }
