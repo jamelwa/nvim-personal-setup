@@ -94,7 +94,6 @@ return {
       "nvim-telescope/telescope.nvim",
       "hrsh7th/nvim-cmp",
       "ibhagwan/fzf-lua",
-      "zbirenbaum/copilot.lua",
       {
         "HakonHarnes/img-clip.nvim",
         event = "VeryLazy",
@@ -121,9 +120,16 @@ return {
 
   {
     "github/copilot.vim",
-    event = "VeryLazy",
+    event = "VimEnter",
     config = function()
       vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
+
+      -- Auto-start copilot
+      vim.defer_fn(function()
+        vim.cmd("Copilot status")
+      end, 100)
+
       vim.api.nvim_set_keymap("i", "<C-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
       vim.api.nvim_set_keymap("i", "<C-l>", "copilot#Next()", { silent = true, expr = true })
       vim.api.nvim_set_keymap("i", "<C-h>", "copilot#Previous()", { silent = true, expr = true })

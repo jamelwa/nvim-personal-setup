@@ -218,6 +218,13 @@ return {
         args = {'--interpreter=vscode'}
       }
 
+      dap.adapters.ruby = {
+        type = 'executable',
+        command = 'ruby-debug-ide',
+        args = { '--host', '127.0.0.1', '--port', '${port}', '--dispatcher-port', '${port}' },
+        port = 38698
+      }
+
       dap.configurations.rust = {
         {
           name = 'Launch',
@@ -302,6 +309,44 @@ return {
 
       -- Also support debugging from solution directory (netrw)
       dap.configurations.netrw = { get_dotnet_debug_config() }
+
+      dap.configurations.ruby = {
+        {
+          name = "Debug Ruby file",
+          type = "ruby",
+          request = "launch",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+        },
+        {
+          name = "Debug Ruby script with args",
+          type = "ruby",
+          request = "launch",
+          program = function()
+            return vim.fn.input("Path to ruby script: ", vim.fn.expand("%:p"), "file")
+          end,
+          args = function()
+            local input = vim.fn.input("Script arguments: ")
+            return vim.split(input, " ")
+          end,
+          cwd = "${workspaceFolder}",
+        },
+        {
+          name = "Debug Rails server",
+          type = "ruby",
+          request = "launch",
+          program = "bin/rails",
+          args = { "server" },
+          cwd = "${workspaceFolder}",
+        },
+        {
+          name = "Attach to Ruby process",
+          type = "ruby",
+          request = "attach",
+          host = "127.0.0.1",
+          port = 38698,
+        }
+      }
 
       dap.listeners.before.attach.dapui_config = function()
         dapui.open()

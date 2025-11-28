@@ -6,7 +6,8 @@ local languages = {
   'csharp',
   'dart',
   'web',
-  'rust'
+  'rust',
+  'ruby'
 }
 
 for _, lang in ipairs(languages) do

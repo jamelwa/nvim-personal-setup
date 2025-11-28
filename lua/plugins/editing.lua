@@ -70,6 +70,7 @@ return {
           "css",
           "rust",
           "toml",
+          "ruby",
         },
         highlight = {
           enable = true,
@@ -251,12 +252,28 @@ return {
         vue = { "prettier" },
         rust = { "rustfmt" },
         toml = { "taplo" },
+        ruby = { "rubocop" },
+        eruby = { "rubocop" },
       },
       formatters = {
         csharpier = {
           command = vim.fn.expand("~/.local/bin/csharpier-wrapper.sh"),
           stdin = true,
           timeout_ms = 10000,
+        },
+        rubocop = {
+          command = (function()
+            local handle = io.popen("rvm current 2>/dev/null")
+            local ruby_version = handle:read("*a"):gsub("%s+", "")
+            handle:close()
+
+            if ruby_version and ruby_version ~= "" then
+              return string.format("%s/.rvm/gems/%s/bin/rubocop", os.getenv("HOME"), ruby_version)
+            end
+            return "rubocop"
+          end)(),
+          args = { "--stdin", "$FILENAME", "--format", "quiet", "--stderr", "--autocorrect" },
+          stdin = true,
         },
       },
     },
@@ -416,6 +433,47 @@ return {
         },
       },
     },
+  },
+
+  {
+    "tpope/vim-rails",
+    ft = { "ruby", "eruby" },
+    dependencies = { "tpope/vim-bundler" },
+    config = function()
+      vim.g.rails_projections = {
+        ["app/controllers/*_controller.rb"] = {
+          test = "spec/requests/{}_spec.rb",
+          alternate = "spec/controllers/{}_controller_spec.rb"
+        },
+        ["app/models/*.rb"] = {
+          test = "spec/models/{}_spec.rb"
+        },
+        ["app/views/*.html.erb"] = {
+          test = "spec/views/{}_spec.rb"
+        },
+        ["spec/requests/*_spec.rb"] = {
+          alternate = "app/controllers/{}_controller.rb"
+        },
+        ["spec/models/*_spec.rb"] = {
+          alternate = "app/models/{}.rb"
+        }
+      }
+    end
+  },
+
+  {
+    "tpope/vim-bundler",
+    ft = { "ruby", "eruby" }
+  },
+
+  {
+    "vim-ruby/vim-ruby",
+    ft = { "ruby", "eruby" },
+    config = function()
+      vim.g.ruby_indent_assignment_style = "variable"
+      vim.g.ruby_indent_block_style = "do"
+      vim.g.ruby_indent_hanging_elements = 1
+    end
   },
 
   {
