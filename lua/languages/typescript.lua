@@ -1,10 +1,12 @@
 local lsp_core = require('core.lsp')
+local lspconfig = require('lspconfig')
 
-vim.lsp.config('ts_ls', {
+lspconfig.ts_ls.setup({
   cmd = { 'typescript-language-server', '--stdio' },
   filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-  root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+  root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
   capabilities = lsp_core.capabilities(),
+  on_attach = lsp_core.on_attach,
   settings = {
     typescript = {
       inlayHints = {
@@ -31,26 +33,3 @@ vim.lsp.config('ts_ls', {
   }
 })
 
-vim.lsp.config('eslint', {
-  cmd = { 'vscode-eslint-language-server', '--stdio' },
-  filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-  root_markers = { '.eslintrc', '.eslintrc.json', '.eslintrc.js', 'package.json', '.git' },
-  capabilities = lsp_core.capabilities(),
-  settings = {
-    workingDirectory = { mode = 'auto' },
-  },
-  on_attach = function(client, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
-  end,
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-  callback = function(args)
-    vim.lsp.start({ name = 'ts_ls', bufnr = args.buf })
-    vim.lsp.start({ name = 'eslint', bufnr = args.buf })
-  end,
-})

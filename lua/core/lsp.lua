@@ -43,6 +43,23 @@ M.on_attach = function(client, bufnr)
 end
 
 M.setup = function()
+  -- Configure diagnostics for better error messages
+  vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+      show_header = true,
+      source = 'always',
+      border = 'rounded',
+    },
+  })
+
+  -- Enable LSP logging for debugging
+  vim.lsp.set_log_level("info")
+
   vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(args)
       local client = vim.lsp.get_client_by_id(args.data.client_id)
