@@ -60,8 +60,14 @@ return {
         enable_cursor_planning_mode = true,
         enable_claude_text_editor_tool_mode = true,
       },
-      provider = "copilot",
+      provider = "openrouter",
       providers = {
+        openrouter = {
+          __inherited_from = "openai",
+          endpoint = "https://openrouter.ai/api/v1",
+          api_key_name = "OPENROUTER_API_KEY",
+          model = "minimax/minimax-m2.1",
+        },
         claude = {
           endpoint = "https://api.anthropic.com",
           model = "claude-sonnet-4",
@@ -71,17 +77,23 @@ return {
             max_tokens = 20480,
           },
         },
-        copilot = {
-          endpoint = "https://api.githubcopilot.com",
-          model = "gpt-4o",
-          proxy = nil,
-          allow_insecure = false,
-          timeout = 30000,
-          extra_request_body = {
-            temperature = 0.1,
-            max_tokens = 10240,
-          },
+        deepseek = {
+          __inherited_from = "openai",
+          endpoint = "https://api.deepseek.com/v1",
+          api_key_name = "DEEPSEEK_API_KEY",
+          model = "deepseek-chat",
         },
+        -- copilot = {
+        --   endpoint = "https://api.githubcopilot.com",
+        --   model = "gpt-4o",
+        --   proxy = nil,
+        --   allow_insecure = false,
+        --   timeout = 30000,
+        --   extra_request_body = {
+        --     temperature = 0.1,
+        --     max_tokens = 10240,
+        --   },
+        -- },
       },
     },
     build = "make",
@@ -118,22 +130,54 @@ return {
     },
   },
 
+  -- {
+  --   "github/copilot.vim",
+  --   event = "VimEnter",
+  --   config = function()
+  --     vim.g.copilot_no_tab_map = true
+  --     vim.g.copilot_assume_mapped = true
+  --
+  --     -- Auto-start copilot
+  --     vim.defer_fn(function()
+  --       vim.cmd("Copilot status")
+  --     end, 100)
+  --
+  --     vim.api.nvim_set_keymap("i", "<C-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+  --     vim.api.nvim_set_keymap("i", "<C-l>", "copilot#Next()", { silent = true, expr = true })
+  --     vim.api.nvim_set_keymap("i", "<C-h>", "copilot#Previous()", { silent = true, expr = true })
+  --     vim.api.nvim_set_keymap("i", "<C-o>", "copilot#Dismiss()", { silent = true, expr = true })
+  --   end,
+  -- },
+
   {
-    "github/copilot.vim",
-    event = "VimEnter",
-    config = function()
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_assume_mapped = true
-
-      -- Auto-start copilot
-      vim.defer_fn(function()
-        vim.cmd("Copilot status")
-      end, 100)
-
-      vim.api.nvim_set_keymap("i", "<C-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-      vim.api.nvim_set_keymap("i", "<C-l>", "copilot#Next()", { silent = true, expr = true })
-      vim.api.nvim_set_keymap("i", "<C-h>", "copilot#Previous()", { silent = true, expr = true })
-      vim.api.nvim_set_keymap("i", "<C-o>", "copilot#Dismiss()", { silent = true, expr = true })
-    end,
+    "milanglacier/minuet-ai.nvim",
+    event = "VeryLazy",
+    opts = {
+      provider = "openai_fim_compatible",
+      n_completions = 3,
+      context_window = 32000,
+      request_timeout = 5,
+      throttle = 800,
+      debounce = 300,
+      provider_options = {
+        openai_fim_compatible = {
+          optional = {
+            max_tokens = 256,
+            temperature = 0.1,
+            top_p = 0.9,
+          },
+        },
+      },
+      virtualtext = {
+        auto_trigger_ft = { "*" },
+        keymap = {
+          accept = "<C-]>",
+          accept_line = "<C-'>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-,>",
+        },
+      },
+    },
   },
 }
